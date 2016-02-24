@@ -12,12 +12,13 @@ $(document).on('click', '#profile', function(){
   });
 });
 
-$(document).on('change', '#currentPassword', function(){
+$(document).on('focusout', '#currentPassword', function(){
   $.ajax({
-    type: "GET",
-    url: "/verify",
+    type: "POST",
+    url: "/api/verify",
+    contentType: 'application/json',
     async: true,
-    data: JSON.stringify({ currentPassword: $('#currentPassword').val() }),
+    data: JSON.stringify({ id: $('#id').val(), password: $('#currentPassword').val() }),
     dataType: "json",
     success: function(response){
       console.log(response);
@@ -27,7 +28,7 @@ $(document).on('change', '#currentPassword', function(){
 
 $(document).on('click', '#credentials', function(){
   var current = $('#currentPassword').val()
-  var new = $('#newPassword').val()
+  var newPassword = $('#newPassword').val()
   var newRepeat = $("newPasswordRepeat").val()
 
   $.ajax({
@@ -35,7 +36,7 @@ $(document).on('click', '#credentials', function(){
     type: "PUT",
     contentType: 'application/json',
     async: true,
-    data: JSON.stringify({ id: $('#id').val(), currentPassword: current, newPassword: new, newPasswordRepeat: newRepeat }),
+    data: JSON.stringify({ id: $('#id').val(), currentPassword: current, newPassword: newPassword, newPasswordRepeat: newRepeat }),
     dataType: "json",
     success: function(message){
       console.log(message);
