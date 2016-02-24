@@ -1,0 +1,68 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+  <head>
+  	<title>IMS</title>
+    <% include partials/css %> <!-- load css -->
+  	<style>
+  		body 		{ padding-top:80px; word-wrap:break-word; }
+  	</style>
+  </head>
+  <body>
+
+  	<% include partials/nav %>
+
+  	<div class="container">
+      <div class="jumbotron">
+        <h3>User Profile</h3>
+        <form role="form" action="javascript:void(0)">
+          <div class="form-group">
+            <label for="id">User ID</label>
+            <input type="text" class="form-control" id="id" value="<%= user.id %>" disabled="true">
+          </div>
+
+          <div class="form-group">
+            <label for="admin">Administrator</label>
+            <input type="text" class="form-control" id="admin" value="<% if (user.Admin == 1) { %> True <% } else{ %> False <% } %>" disabled="true">
+          </div>
+
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" value="<%= user.name %>">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email" value="<%= user.email %>">
+          </div>
+
+          <button type="submit" id="profile" class="btn btn-default">Submit</button>
+        </form>
+      </div>
+
+      <div class="jumbotron">
+        <form role="form" action="javascript:void(0)">
+          <div class="form-group">
+            <label for="currentPassword">Current Password</label>
+            <input type="password" class="form-control" id="currentPassword" placeholder="Current Password">
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">Email</label>
+            <input type="password" class="form-control" id="newPassword" placeholder="New Password">
+          </div>
+
+          <div class="form-group">
+            <label for="newPasswordRepeat">Email</label>
+            <input type="password" class="form-control" id="newPasswordRepeat" placeholder="New Password Repeat">
+          </div>
+
+          <button type="submit" id="credentials" class="btn btn-default">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <% include partials/js %> <!-- load js -->
+
+  </body>
+</html>
