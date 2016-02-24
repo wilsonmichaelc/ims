@@ -2,6 +2,7 @@
 var mysql = require('mysql');
 var dbconfig = require('../config/database');
 var middleware = require('./middleware');
+var bcrypt = require('bcrypt');
 var connection = mysql.createConnection(dbconfig.connection);
 
 connection.query('USE ' + dbconfig.database);
@@ -13,8 +14,8 @@ module.exports = function(app, passport){
   // =====================================
   // we will want this protected so you have to be logged in to visit
   // we will use route middleware to verify this (the isLoggedIn function)
-  app.get('/api/users', isAdminOrSuper, function(req, res) {
-    connection.query("SELECT id, name, email, Admin, SuperUser, CreatedAt FROM Users", function(err, rows){
+  app.get('/api/users', middleware.isAdmin, function(req, res) {
+    connection.query("SELECT id, name, email, admin, createdAt FROM Users", function(err, rows){
       if(err){
         return done(err);
       }else if(rows.length){
@@ -28,9 +29,9 @@ module.exports = function(app, passport){
   // =====================================
   // we will want this protected so you have to be logged in to visit
   // we will use route middleware to verify this (the isLoggedIn function)
-  app.get('/api/users/:user', isAdminOrSuper, function(req, res) {
+  app.get('/api/users/:user', middleware.isAdmin, function(req, res) {
     var id = req.params.user;
-    connection.query("SELECT id, name, email, Admin, SuperUser, CreatedAt FROM Users WHERE id = ? ",[id], function(err, rows){
+    connection.query("SELECT id, name, email, admin, createdAt FROM Users WHERE id = ? ",[id], function(err, rows){
       if(err){
         return done(err);
       }else if(rows.length){
@@ -49,7 +50,7 @@ module.exports = function(app, passport){
     var id = req.body.id;
     var name = req.body.name;
     var email = req.body.email;
-    if(id == req.user.id || isAdminOrSuper){
+    if(id == req.user.id || middleware.isAdmin){
       connection.query("UPDATE Users SET name = ?, email = ? WHERE id = ?",[name, email, id], function(err, rows){
         if(err){
           res.json({"Error" : true, "Message" : "Error executing MySQL query"});
@@ -60,6 +61,21 @@ module.exports = function(app, passport){
     }else{
       res.json({"Error" : true, "Message" : "Only admins can update other profiles"});
     }
+  });
+
+  // =====================================
+  // CHECK USER PASSWORD =================
+  // =====================================
+  app.post('/api/verify', function(req, res) {
+    var id = req.body.id;
+    var pass = req.body.password;
+      if(id == req.user.id){
+        connection.query("SELECT password FROM Users WHERE id = ?",[id], function(err, rows) {
+          if(!err && rows.length){
+            res.send(bcrypt.compareSync(pass, rows[0].password));
+          }
+        });
+      }
   });
 
 };
