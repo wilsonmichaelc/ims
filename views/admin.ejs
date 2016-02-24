@@ -1,0 +1,31 @@
+<!-- views/admin.ejs -->
+<!doctype html>
+<html>
+  <head>
+  	<title>IMS</title>
+  	<% include partials/css %> <!-- load css -->
+  	<style>
+  		body 		{ padding-top:80px; }
+  	</style>
+  </head>
+  <body>
+
+    <% include partials/nav %>
+
+    <div class="container">
+      <div class="jumbotron">
+        <h3>User Management</h3>
+        <select id="userList">
+        <option value=""></option>
+        </select>
+      </div>
+
+      <div class="jumbotron">
+        <h3>Instrument Management</h3>
+      </div>
+    </div>
+
+    <% include partials/js %> <!-- load js -->
+
+  </body>
+</html>
