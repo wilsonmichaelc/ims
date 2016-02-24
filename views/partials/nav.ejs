@@ -14,13 +14,10 @@
       <ul class="nav navbar-nav">
         <li class="<% if(page=='home'){ %>active<% } %>"><a href="/home">Home</a></li>
         <li class="<% if(page=='book'){ %>active<% } %>"><a href="/book">Book</a></li>
-        <li class="<% if(page=='settings'){ %>active<% } %>"><a href="/settings">Profile</a></li>
+        <li class="<% if(page=='profile'){ %>active<% } %>"><a href="/profile">Profile</a></li>
 
-        <% if (user.Admin == 1) { %>
+        <% if (user.admin) { %>
         <li class="<% if(page=='admin'){ %>active<% } %>"><a href="/admin">Admin</a></li>
-        <% } %>
-        <% if (user.SuperUser == 1) { %>
-        <li class="<% if(page=='super'){ %>active<% } %>"><a href="/superuser">SysAdmin</a></li>
         <% } %>
 
       </ul>
