@@ -36,21 +36,6 @@ module.exports = function(app, passport) {
         res.redirect('/');
     });
 
-		// process the login form
-		app.post('/verify', passport.authenticate('local-verify', {
-					successRedirect : '/settings', // redirect to the secure profile section
-					failureRedirect : '/settings', // redirect back to the signup page if there is an error
-					failureFlash : true // allow flash messages
-			}),
-      function(req, res) {
-          if (req.body.remember) {
-            req.session.cookie.maxAge = 1000 * 60 * 3;
-          } else {
-            req.session.cookie.expires = false;
-          }
-        res.redirect('/');
-    });
-
 	// =====================================
 	// SIGNUP ==============================
 	// =====================================
@@ -72,7 +57,7 @@ module.exports = function(app, passport) {
 	// =====================================
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
-	app.get('/home', isLoggedIn, function(req, res) {
+	app.get('/home', middleware.isLoggedIn, function(req, res) {
 		res.render('home.ejs', {
 			user : req.user, // get the user out of session and pass to template
 			page : 'home'
@@ -84,7 +69,7 @@ module.exports = function(app, passport) {
 	// =====================================
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
-	app.get('/book', isLoggedIn, function(req, res) {
+	app.get('/book', middleware.isLoggedIn, function(req, res) {
 		res.render('book.ejs', {
 			user : req.user, // get the user out of session and pass to template
 			page : 'book'
@@ -96,7 +81,7 @@ module.exports = function(app, passport) {
 	// =====================================
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
-	app.get('/profile', isLoggedIn, function(req, res) {
+	app.get('/profile', middleware.isLoggedIn, function(req, res) {
 		res.render('profile.ejs', {
 			user : req.user, // get the user out of session and pass to template
 			page : 'profile'
@@ -108,11 +93,10 @@ module.exports = function(app, passport) {
 	// =====================================
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
-	app.get('/admin', isAdmin, function(req, res) {
+	app.get('/admin', middleware.isAdmin, function(req, res) {
 		res.render('admin.ejs', {
 			user : req.user, // get the user out of session and pass to template
-			page : 'admin',
-			//data : rows
+			page : 'admin'
 		});
 	});
 
@@ -124,53 +108,3 @@ module.exports = function(app, passport) {
 		res.redirect('/');
 	});
 };
-
-// route middleware to make sure user is logged in
-function isLoggedIn(req, res, next) {
-
-	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated())
-		return next();
-
-	// if they aren't redirect them to the home page
-	res.redirect('/');
-}
-
-// route middleware to make sure user is logged in AND an administrator
-function isAdmin(req, res, next) {
-
-	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated())
-		if(req.user.Admin){
-			return next();
-		}
-
-	// if they aren't redirect them to the home page
-	res.redirect('/');
-}
-
-// route middleware to make sure user is logged in AND a super user
-function isSuperUser(req, res, next) {
-
-	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated())
-		if(req.user.SuperUser){
-			return next();
-		}
-
-	// if they aren't redirect them to the home page
-	res.redirect('/');
-}
-
-// route middleware to make sure user is logged in AND a super user
-function isAdminOrSuper(req, res, next) {
-
-	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated())
-		if(req.user.SuperUser || req.user.Admin){
-			return next();
-		}
-
-	// if they aren't redirect them to the home page
-	res.redirect('/');
-}
