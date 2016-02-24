@@ -3,7 +3,8 @@
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
 var mysql = require('mysql');
-var bcrypt = require('bcrypt-nodejs');
+var bcrypt = require('bcrypt');
+var salt = bcrypt.genSaltSync(10);
 var dbconfig = require('./database');
 var connection = mysql.createConnection(dbconfig.connection);
 connection.query('USE ' + dbconfig.database);
@@ -56,7 +57,7 @@ module.exports = function(passport) {
                     // create the user
                     var newUserMysql = {
                         email: email,
-                        password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
+                        password: bcrypt.hashSync(password, 10)  // use the generateHash function in our user model
                     };
 
                     var insertQuery = "INSERT INTO Users ( email, password ) values (?,?)";
@@ -103,38 +104,4 @@ module.exports = function(passport) {
         })
     );
 
-    // =========================================================================
-    // LOCAL VERIFY ============================================================
-    // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
-
-    passport.use(
-        'local-verify',
-        new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            id : 'id',
-            password : 'currentPassword',
-            //passReqToCallback : true // allows us to pass back the entire request to the callback
-        },
-        function(req, res, id, password, done) {
-            // find a user whose email is the same as the forms email
-            // we are checking to see if the user trying to login already exists
-            connection.query("SELECT * FROM Users WHERE id = ?",[id], function(err, rows) {
-                if (err)
-                  res.send();
-                if (!rows.length) {
-                  res.send('false');
-                }
-
-                // if the user is found but the password is wrong
-                if (!bcrypt.compareSync(password, rows[0].password)){
-                  res.send('false');
-                }
-
-                // all is well, return successful user
-                res.send('true');
-            });
-        })
-    );
 };
