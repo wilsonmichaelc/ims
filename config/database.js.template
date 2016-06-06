@@ -1,0 +1,10 @@
+// config/database.js
+module.exports = {
+    'connection': {
+        'host': 'mysql_hostname',
+        'user': 'your_username',
+        'password': 'your_password',
+    },
+    'database': 'ims',
+    'timezone': 'utc'
+};
