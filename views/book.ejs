@@ -4,17 +4,94 @@
   <head>
   	<title>IMS</title>
   	<% include partials/css %> <!-- load css -->
+    <link rel="stylesheet" href="./fullcalendar.min.css"></link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
   	<style>
   		body 		{ padding-top:80px; }
   	</style>
   </head>
   <body>
     <% include partials/nav %>
+
     <div class="container">
-      <div class="jumbotron text-center">
-        <h1><span class="fa fa-calendar"></span> Calendar Goes Here</h1>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Book an Instrument</h3>
+            </div>
+            <div class="panel-body">
+              <div id='calendar'></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="add-booking" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">New Booking</h4>
+          </div>
+          <div class="modal-body">
+
+            <label for="instrumentListTitle">Instrument</label>
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="instrumentListTitle">
+                <% if(instruments.length != 0) { %>
+                  Select ... <span class="caret"></span>
+                <% } else { %>
+                  All Instruments Are Offline
+                <% } %>
+              </button>
+              <ul class="dropdown-menu">
+                <% for(var i=0; i<instruments.length; i++) { %>
+                  <li><a href="#" class="instrumentList" uid="<%= instruments[i].id %>"><%= instruments[i].name %></a></li>
+                <% } %>
+              </ul>
+            </div>
+            <p></p>
+
+            <label for="">Book From</label>
+            <div class="form-group">
+              <div class='input-group date' id='dateTimeFrom'>
+                <input type='text' class="form-control" placeholder="mm/dd/yyyy hh:mm pm" onkeydown="return false"/>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+
+            <label for="">Book To</label>
+            <div class="form-group">
+              <div class='input-group date' id='dateTimeTo'>
+                <input type='text' class="form-control" placeholder="mm/dd/yyyy hh:mm pm" onkeydown="return false"/>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <% if(instruments.length != 0) { %>
+              <button type="button" class="btn btn-primary">Book</button>
+            <% }else{ %>
+              <button type="button" class="btn btn-primary" disabled="true">Book</button>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <% include partials/js %> <!-- load js -->
+    <script src="./moment.min.js"></script>
+    <script src="./fullcalendar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="./book.js"></script>
   </body>
 </html>
