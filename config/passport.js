@@ -59,13 +59,16 @@ module.exports = function(passport) {
                         email: email,
                         password: bcrypt.hashSync(password, 10)  // use the generateHash function in our user model
                     };
+                    console.log(newUserMysql.password.length);
 
                     var insertQuery = "INSERT INTO Users ( email, password ) values (?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, rows) {
-                        newUserMysql.id = rows.insertId;
+                    connection.query(insertQuery,[newUserMysql.email, newUserMysql.password],function(err, result) {
+                      if(err) throw err;
+                      console.log(result.insertId);
+                      newUserMysql.id = result.insertId;
 
-                        return done(null, newUserMysql);
+                      return done(null, newUserMysql);
                     });
                 }
             });
@@ -92,6 +95,9 @@ module.exports = function(passport) {
                     return done(err);
                 if (!rows.length) {
                     return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                }
+                if (rows[0].locked){
+                  return done(null, false, req.flash('loginMessage', 'This account has been locked.'));
                 }
 
                 // if the user is found but the password is wrong
