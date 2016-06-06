@@ -13,15 +13,80 @@
     <% include partials/nav %>
 
     <div class="container">
-      <div class="jumbotron">
-        <h3>User Management</h3>
-        <select id="userList">
-          <option value=""></option>
-        </select>
-      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">User Management</h3>
+            </div>
+            <div class="panel-body">
+              <div id="errorBox" class="alert alert-danger"></div>
+              <div id="messageBox" class="alert alert-success"></div>
+              <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select a user <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" class="userList" uid="">&nbsp;</a></li>
+                  <% for(var i=0; i<users.length; i++) { %>
+                    <li><a href="#" class="userList" uid="<%= users[i].id %>"><%= users[i].name %></a></li>
+                  <% } %>
+                </ul>
+              </div>
 
-      <div class="jumbotron">
-        <h3>Instrument Management</h3>
+              <div id="editUser">
+                <form class="" action="javascript:void(0)">
+                  <input type="hidden" name="id" value="">
+                  <fieldset class="form-group">
+                    <label for="name">Name</label>
+                    <input type="name" class="form-control" name="name" placeholder="John Doe">
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label for="email">Email</label>
+                    <input type="name" class="form-control" name="email" placeholder="jdoe@gmail.com">
+                  </fieldset>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <fieldset class="form-group">
+                        <label for="optionTrue">Administrator</label><br />
+                        <div class="btn-group" data-toggle="buttons">
+                          <label class="btn btn-primary">
+                            <input type="radio" name="optionTrue" id="adminTrue" autocomplete="off">Yes
+                          </label>
+                          <label class="btn btn-primary">
+                            <input type="radio" name="optionFalse" id="adminFalse" autocomplete="off">No
+                          </label>
+                        </div>
+                      </fieldset>
+                    </div>
+                    <div class="col-md-4">
+                      <fieldset class="form-group">
+                        <label for="optionTrue">Account Locked</label><br />
+                        <div class="btn-group" data-toggle="buttons">
+                          <label class="btn btn-primary">
+                            <input type="radio" name="optionTrue" id="lockedTrue" autocomplete="off">Yes
+                          </label>
+                          <label class="btn btn-primary">
+                            <input type="radio" name="optionFalse" id="lockedFalse" autocomplete="off">No
+                          </label>
+                        </div>
+                      </fieldset>
+                    </div>
+                  </div>
+
+                  <button class="btn btn-success pull-right" type="submit" id="updateUser">Update</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">What??</h3>
+            </div>
+            <div class="panel-body"></div>
+          </div>
+        </div>
       </div>
     </div>
 
