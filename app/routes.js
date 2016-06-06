@@ -2,6 +2,9 @@
 
 // import the middleware
 var middleware = require('./middleware');
+var users = require('./users');
+var instruments = require('./instruments');
+var book = require('./book');
 
 module.exports = function(app, passport) {
 
@@ -69,9 +72,11 @@ module.exports = function(app, passport) {
 	// =====================================
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
-	app.get('/book', middleware.isLoggedIn, function(req, res) {
+	app.get('/book', middleware.isLoggedIn, instruments.fetchUserInstruments, book.fetchAllBookings, function(req, res) {
 		res.render('book.ejs', {
 			user : req.user, // get the user out of session and pass to template
+			instruments: req.instruments,
+			bookings: req.bookings,
 			page : 'book'
 		});
 	});
@@ -93,9 +98,10 @@ module.exports = function(app, passport) {
 	// =====================================
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
-	app.get('/admin', middleware.isAdmin, function(req, res) {
+	app.get('/admin', middleware.isAdmin, users.fetchAllUsers, function(req, res) {
 		res.render('admin.ejs', {
 			user : req.user, // get the user out of session and pass to template
+			users: req.users,
 			page : 'admin'
 		});
 	});
