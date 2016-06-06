@@ -2,16 +2,15 @@
 
 // set up ======================================================================
 // get all the tools we need
-var express  = require('express');
-var session  = require('express-session');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var morgan = require('morgan');
-var app      = express();
-var port     = process.env.PORT || 8080;
-
-var passport = require('passport');
-var flash    = require('connect-flash');
+var express  			= require('express');
+var session  			= require('express-session');
+var cookieParser 		= require('cookie-parser');
+var bodyParser 			= require('body-parser');
+var morgan 			= require('morgan');
+var passport 			= require('passport');
+var flash    			= require('connect-flash');
+var port     			= 8080;
+var app      			= express();
 
 // configuration ===============================================================
 // connect to our database
